@@ -1,6 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+/* 
+ * This file is part of the PortTest distribution (https://github.com/matteobaccan/PortTest).
+ * Copyright (c) 2021 Matteo Baccan
+ * 
+ * This program is free software: you can redistribute it and/or modify  
+ * it under the terms of the GNU General Public License as published by  
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License 
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package it.baccan.porttest;
 
@@ -16,11 +28,13 @@ import java.util.Objects;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
- * @author Matteo
+ * @author Matteo Baccan
  */
+@Slf4j
 public class PortTest extends javax.swing.JFrame {
 
     /**
@@ -333,11 +347,11 @@ public class PortTest extends javax.swing.JFrame {
     private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
         try {
             portConnector.send(jTextFieldSendText.getText() + "\r\n");
-            logToTextArea(jTextFieldSendText.getText());
+            logToTextArea("Sent [" + jTextFieldSendText.getText() + "]");
             jTextFieldSendText.setText("");
         } catch (IOException ex) {
             disconnect();
-            logToTextArea("Send: " + ex.getMessage());
+            logToTextArea("Send errot: " + ex.getMessage());
         }
     }//GEN-LAST:event_jButtonSendActionPerformed
 
@@ -357,12 +371,12 @@ public class PortTest extends javax.swing.JFrame {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
             logToTextArea("Save as file: " + fileToSave.getAbsolutePath());
-            try (FileWriter fw = new FileWriter(fileToSave)) {
-                try (BufferedWriter bw = new BufferedWriter(fw)) {
+            try ( FileWriter fw = new FileWriter(fileToSave)) {
+                try ( BufferedWriter bw = new BufferedWriter(fw)) {
                     bw.write(jTextAreaOutput.getText());
                 }
             } catch (IOException ex) {
-                logToTextArea("Save: " + ex.getMessage());
+                logToTextArea("Save error: " + ex.getMessage());
             }
         }
     }//GEN-LAST:event_jButtonSaveAsActionPerformed
@@ -434,11 +448,14 @@ public class PortTest extends javax.swing.JFrame {
     }
 
     private void logToTextArea(final String error) {
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-        jTextAreaDebug.append(simpleDateFormat.format(new Date()));
-        jTextAreaDebug.append(" - ");
-        jTextAreaDebug.append(error);
+
+        String row = String.format("%s - %s", simpleDateFormat.format(new Date()), error);
+
+        jTextAreaDebug.append(row);
         jTextAreaDebug.append("\r\n");
+        log.info("{}", row);
     }
 
     class SocketOutputReader extends Thread {
@@ -457,11 +474,13 @@ public class PortTest extends javax.swing.JFrame {
         @Override
         public void run() {
             try {
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[64000];
                 while (loop) {
                     int read = inputStream.read(buffer);
                     if (read != -1) {
-                        jTextAreaOutput.append(new String(buffer, 0, read));
+                        String output = new String(buffer, 0, read);
+                        jTextAreaOutput.append(output);
+                        log.info("Received [{}]", output);
                     } else {
                         disconnect();
                         offline();
