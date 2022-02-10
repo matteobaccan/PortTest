@@ -23,6 +23,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.Objects;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  *
@@ -42,13 +44,23 @@ public class PortConnector {
 
     private Socket socket;
 
-    public void connect(final int connectTimeout, final int readTimeout) throws IOException {
+    public void connect(final int connectTimeout, final int readTimeout, final boolean ssl) throws IOException {
         SocketAddress socketAddress = new InetSocketAddress(remoteIp, remotePort);
-        socket = new Socket();
+        if( ssl ){            
+            SSLSocketFactory factory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+            socket = factory.createSocket();
+        } else {
+            socket = new Socket();
+        }
+        
         socket.connect(socketAddress, connectTimeout * 1000);
         socket.setSoTimeout(readTimeout * 1000);
         inputStream = socket.getInputStream();
         outputStream = socket.getOutputStream();
+
+        if( ssl ){            
+            ((SSLSocket)socket).startHandshake();
+        }
     }
 
     public OutputStream getOutputStream() {
