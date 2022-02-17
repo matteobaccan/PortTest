@@ -16,13 +16,14 @@
  */
 package it.baccan.porttest.helper;
 
+import com.esotericsoftware.yamlbeans.YamlReader;
 import it.baccan.porttest.pojo.Port;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 /**
  *
@@ -34,13 +35,15 @@ public class PortDefinition {
     @Getter static Port portData;
 
     static {
-        Constructor constructor = new Constructor(Port.class);
-        Yaml yaml = new Yaml(constructor);
         try (InputStream inputStream = PortDefinition.class
                 .getClassLoader()
                 .getResourceAsStream("port.yaml")) {
-            
-            portData = yaml.load(inputStream);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        
+            YamlReader reader = new YamlReader(inputStreamReader);
+            portData = reader.read(Port.class);
+        } catch (FileNotFoundException ex) {
+            log.info("Error loading definitions", ex);
         } catch (IOException ex) {
             log.info("Error loading definitions", ex);
         }
