@@ -1,33 +1,45 @@
-/* 
+/*
  * This file is part of the PortTest distribution (https://github.com/matteobaccan/PortTest).
  * Copyright (c) 2021 Matteo Baccan
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package it.baccan.porttest;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import it.baccan.porttest.helper.PortDefinition;
+import it.baccan.porttest.pojo.Port;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -378,8 +390,8 @@ public class PortTest extends javax.swing.JFrame {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
             logToTextArea("Save as file: " + fileToSave.getAbsolutePath());
-            try ( FileWriter fw = new FileWriter(fileToSave)) {
-                try ( BufferedWriter bw = new BufferedWriter(fw)) {
+            try (FileWriter fw = new FileWriter(fileToSave)) {
+                try (BufferedWriter bw = new BufferedWriter(fw)) {
                     bw.write(jTextAreaOutput.getText());
                 }
             } catch (IOException ex) {
@@ -389,20 +401,59 @@ public class PortTest extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSaveAsActionPerformed
 
     private void jButtonPortsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPortsActionPerformed
-        String[] names = {"80 - HTTP",
-            "110 - POP3",
-            "25 - SMTP"};
-        String port = (String) JOptionPane.showInputDialog(null, "Choose from standard ports", "Ports choice", JOptionPane.PLAIN_MESSAGE, null, names, "");
-        if (port != null) {
-            jTextFieldPort.setText(port.substring(0, port.indexOf(' ')).trim());
-        }
+        // Coloumns definition
+        Object[] columns = {"Post", "Protocol", "SSL"};
+
+        // Add rows
+        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        PortDefinition.getPortData().getPortDetails().forEach(detail -> model.addRow(new Object[]{detail.getPort(), detail.getProtocol(), detail.isSsl()}));
+
+        // Post to chooise
+        final AtomicInteger portChoosen = new AtomicInteger(0);
+
+        // Create table
+        JTable table = new JTable(model) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent event) {
+                int viewRow = table.getSelectedRow();
+                if (viewRow >= 0) {
+                    int modelRow = table.convertRowIndexToModel(viewRow);
+                    portChoosen.set((int) model.getValueAt(modelRow, 0));
+                }
+            }
+        });
+
+        // Scelta porta
+        JOptionPane.showMessageDialog(null, new JScrollPane(table));
+        PortDefinition.getPortData().getPortDetails().forEach(detail -> {
+            if (detail.getPort() == portChoosen.get()) {
+                jTextFieldPort.setText("" + detail.getPort());
+                jCheckBoxSSL.setSelected(detail.isSsl());
+            }
+        });
+
     }//GEN-LAST:event_jButtonPortsActionPerformed
 
     private void jButtonStandardCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStandardCommandActionPerformed
-        String[] names = {"HTTP: GET / HTTP/1.0"};
+
+        List<String> namesList = new ArrayList<>();
+        PortDefinition.getPortData().getPortDetails().forEach(detail -> {
+            if (jTextFieldPort.getText().trim().equals("" + detail.getPort())) {
+                detail.getCommands().forEach(command -> namesList.add(command.getCmd()));
+            }
+        });
+
+        String[] names = namesList.toArray(new String[0]);
         String command = (String) JOptionPane.showInputDialog(null, "Choose from standard commands", "Commands choice", JOptionPane.PLAIN_MESSAGE, null, names, "");
         if (command != null) {
-            jTextFieldSendText.setText(command.substring(command.indexOf(' ')).trim());
+            jTextFieldSendText.setText(command);
         }
     }//GEN-LAST:event_jButtonStandardCommandActionPerformed
 
