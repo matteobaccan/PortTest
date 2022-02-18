@@ -44,6 +44,6 @@ portDetails:
   </code>
 </pre>
 
-Commands may be choosedby GUI
+Commands may be choosed by GUI
 
 ![GUI](./commands.png)
