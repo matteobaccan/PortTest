@@ -18,7 +18,6 @@ package it.baccan.porttest;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import it.baccan.porttest.helper.PortDefinition;
-import it.baccan.porttest.pojo.Port;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -433,7 +431,7 @@ public class PortTest extends javax.swing.JFrame {
         });
 
         // Scelta porta
-        JOptionPane.showMessageDialog(null, new JScrollPane(table));
+        JOptionPane.showMessageDialog(null, new JScrollPane(table), "Select port to open",JOptionPane.PLAIN_MESSAGE);
         PortDefinition.getPortData().getPortDetails().forEach(detail -> {
             if (detail.getPort() == portChoosen.get()) {
                 jTextFieldPort.setText("" + detail.getPort());
