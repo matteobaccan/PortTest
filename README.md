@@ -12,6 +12,8 @@ PortTest check if a TCP/IP port is open.
 
 You can use a plain test connection or a SSL connection.
 
+![GUI](./portlist.png)
+
 PortTest have a predefinited port list, described in this [yaml file](https://github.com/matteobaccan/PortTest/blob/main/src/main/resources/port.yaml)
 
 ## Port.yaml
@@ -41,3 +43,7 @@ portDetails:
      protocol: "POP3"
   </code>
 </pre>
+
+Commands may be choosedby GUI
+
+![GUI](./commands.png)
