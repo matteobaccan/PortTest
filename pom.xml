@@ -106,24 +106,28 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
-                <groupId>org.graalvm.nativeimage</groupId>
-                <artifactId>native-image-maven-plugin</artifactId>
-                <version>${native-image-maven-plugin.version}</version>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>${native.maven.plugin.version}</version>
+                <extensions>true</extensions>
                 <executions>
                     <execution>
+                        <id>build-native</id>
                         <goals>
-                            <goal>native-image</goal>
+                            <goal>compile-no-fork</goal>
                         </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <mainClass>it.baccan.porttest.PortTest</mainClass>
-                            <buildArgs>--no-fallback --allow-incomplete-classpath</buildArgs>
-                            <imageName>PortTest</imageName>
-                            <skip>true</skip>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <verbose>true</verbose>
+                    <mainClass>it.baccan.porttest.PortTest</mainClass>
+                    <buildArgs>
+                        <arg>--no-fallback --allow-incomplete-classpath</arg>
+                    </buildArgs>
+                    <imageName>PortTest</imageName>
+                </configuration>
             </plugin>
 
             <plugin>
