@@ -370,7 +370,7 @@ public class PortTest extends javax.swing.JFrame {
             jTextFieldSendText.setText("");
         } catch (IOException ex) {
             disconnect();
-            logToTextArea("Send errot: " + ex.getMessage());
+            logToTextArea("Send error: " + ex.getMessage());
         }
     }//GEN-LAST:event_jButtonSendActionPerformed
 
@@ -401,15 +401,15 @@ public class PortTest extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSaveAsActionPerformed
 
     private void jButtonPortsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPortsActionPerformed
-        // Coloumns definition
+        // Columns definition
         Object[] columns = {"Post", "Protocol", "SSL"};
 
         // Add rows
         DefaultTableModel model = new DefaultTableModel(columns, 0);
         PortDefinition.getPortData().getPortDetails().forEach(detail -> model.addRow(new Object[]{detail.getPort(), detail.getProtocol(), detail.isSsl()}));
 
-        // Post to chooise
-        final AtomicInteger portChoosen = new AtomicInteger(0);
+        // Post to choose
+        final AtomicInteger portChoose = new AtomicInteger(0);
 
         // Create table
         JTable table = new JTable(model) {
@@ -425,7 +425,7 @@ public class PortTest extends javax.swing.JFrame {
                 int viewRow = table.getSelectedRow();
                 if (viewRow >= 0) {
                     int modelRow = table.convertRowIndexToModel(viewRow);
-                    portChoosen.set((int) model.getValueAt(modelRow, 0));
+                    portChoose.set((int) model.getValueAt(modelRow, 0));
                 }
             }
         });
@@ -433,7 +433,7 @@ public class PortTest extends javax.swing.JFrame {
         // Scelta porta
         JOptionPane.showMessageDialog(null, new JScrollPane(table), "Select port to open",JOptionPane.PLAIN_MESSAGE);
         PortDefinition.getPortData().getPortDetails().forEach(detail -> {
-            if (detail.getPort() == portChoosen.get()) {
+            if (detail.getPort() == portChoose.get()) {
                 jTextFieldPort.setText("" + detail.getPort());
                 jCheckBoxSSL.setSelected(detail.isSsl());
             }
@@ -460,7 +460,7 @@ public class PortTest extends javax.swing.JFrame {
     private void disconnect() {
         // Disconnect
         if (Objects.nonNull(socketOutputReader)) {
-            logToTextArea("Close comunication");
+            logToTextArea("Close communication");
             socketOutputReader.stopThread();
             socketOutputReader = null;
         }
@@ -483,7 +483,7 @@ public class PortTest extends javax.swing.JFrame {
             logToTextArea("Connect");
             portConnector = new PortConnector(jTextFieldIP.getText(), Integer.parseInt(jTextFieldPort.getText()));
             portConnector.connect(Integer.parseInt(jTextFieldConnectTimeout.getText()), Integer.parseInt(jTextFieldReadTimeout.getText()), jCheckBoxSSL.isSelected());
-            socketOutputReader = new SocketOutputReader(portConnector.getIntputStream());
+            socketOutputReader = new SocketOutputReader(portConnector.getInputStream());
             socketOutputReader.start();
             online();
         } catch (IOException | NumberFormatException ex) {

@@ -67,7 +67,7 @@ public class PortConnector {
         return outputStream;
     }
 
-    public InputStream getIntputStream() {
+    public InputStream getInputStream() {
         return inputStream;
     }
 
