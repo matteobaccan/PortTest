@@ -115,11 +115,11 @@ public class PortTest extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Connect Timeout in sec");
+        jLabel6.setText("Connect Timeout in Sec");
 
         jTextFieldConnectTimeout.setText("10");
 
-        jLabel7.setText("Read Timeout in sec");
+        jLabel7.setText("Read Timeout in Sec");
 
         jTextFieldReadTimeout.setText("0");
 
