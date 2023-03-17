@@ -5,6 +5,7 @@ PortTest allow to test TCP Communication on a Socket Port with Plain Text or SSL
 Are you trying to troubleshoot a connection issue on a socket port? One way to test the communication between the client and server is to use PortTest that that allows you to establish a TCP connection and send messages between the two.
 
 [![CodeQL](https://github.com/matteobaccan/PortTest/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/matteobaccan/PortTest/actions/workflows/codeql-analysis.yml)
+[![Codacy Security Scan](https://github.com/matteobaccan/PortTest/actions/workflows/codacy.yml/badge.svg)](https://github.com/matteobaccan/PortTest/actions/workflows/codacy.yml)
 
 ## Documentation
 
