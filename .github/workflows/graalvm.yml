@@ -5,13 +5,13 @@ on:
     branches: [ main ]
     paths:
       - 'src/main/java/it/baccan/porttest/*.*'
-      - '/.github/workflows/graalvm.yml'
+      - '.github/workflows/graalvm.yml'
       - 'pom.xml'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/main/java/it/baccan/porttest/*.*'
-      - '/.github/workflows/graalvm.yml'
+      - '.github/workflows/graalvm.yml'
       - 'pom.xml'
 
 jobs:
