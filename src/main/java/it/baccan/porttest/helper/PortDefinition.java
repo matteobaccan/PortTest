@@ -32,16 +32,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PortDefinition {
 
-    @Getter static Port portData;
+    @Getter
+    static Port portData;
+
+    /**
+     * Hi public constructor.
+     */
+    private PortDefinition() {
+    }
 
     static {
         try (InputStream inputStream = PortDefinition.class
                 .getClassLoader()
                 .getResourceAsStream("port.yaml")) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        
-            YamlReader reader = new YamlReader(inputStreamReader);
-            portData = reader.read(Port.class);
+
+            try (YamlReader reader = new YamlReader(inputStreamReader)) {
+                portData = reader.read(Port.class);
+            }
         } catch (FileNotFoundException ex) {
             log.info("Error loading definitions", ex);
         } catch (IOException ex) {
