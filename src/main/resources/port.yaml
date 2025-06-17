@@ -20,3 +20,21 @@ portDetails:
      protocol: "SMTP"
    - port: 110
      protocol: "POP3"
+   - port: 21
+     protocol: "FTP"
+     ssl: false
+     commands:
+         - cmd: "FEAT"
+   - port: 22
+     protocol: "SSH"
+     ssl: true
+   - port: 143
+     protocol: "IMAP"
+     ssl: false
+     commands:
+         - cmd: "CAPABILITY"
+   - port: 993
+     protocol: "IMAPS"
+     ssl: true
+     commands:
+         - cmd: "CAPABILITY"
