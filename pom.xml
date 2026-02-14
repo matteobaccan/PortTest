@@ -13,7 +13,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <!-- Allineare la versione con graalvm.yml -->
         <graalvm.version>25.0.2</graalvm.version>
-        <logback.version>1.5.30</logback.version>
+        <logback.version>1.5.31</logback.version>
         <native.maven.plugin.version>0.11.4</native.maven.plugin.version>
         <skipgraalvm>true</skipgraalvm>
     </properties>
