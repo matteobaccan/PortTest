@@ -14,7 +14,7 @@
         <!-- Allineare la versione con graalvm.yml -->
         <graalvm.version>25.2.4</graalvm.version>
         <logback.version>1.6.2</logback.version>
-        <native.maven.plugin.version>1.1.8</native.maven.plugin.version>
+        <native.maven.plugin.version>1.1.9</native.maven.plugin.version>
         <skipgraalvm>true</skipgraalvm>
     </properties>
     
