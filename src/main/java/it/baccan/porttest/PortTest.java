@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -549,6 +550,14 @@ public class PortTest extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // In a GraalVM native image java.home is not set, but AWT needs it to
+        // look up the font configuration: use the executable's directory
+        if (System.getProperty("java.home") == null) {
+            ProcessHandle.current().info().command()
+                    .map(command -> Paths.get(command).getParent())
+                    .ifPresent(dir -> System.setProperty("java.home", dir.toString()));
+        }
+
         FlatLightLaf.setup();
 
         /* Create and display the dialog */
