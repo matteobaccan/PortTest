@@ -196,7 +196,7 @@
                                 <preCp>anything</preCp>
                             </classPath>
                             <jre>
-                                <minVersion>1.8.0</minVersion>
+                                <minVersion>11</minVersion>
                                 <path>%JAVA_HOME%</path>
                             </jre>
                             <versionInfo>
