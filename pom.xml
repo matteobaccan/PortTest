@@ -26,6 +26,29 @@
                 <skipgraalvm>false</skipgraalvm>
             </properties>
         </profile>
+        <profile>
+            <!-- Native executable as a GUI application, without console window -->
+            <id>native-windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <configuration>
+                            <buildArgs combine.children="append">
+                                <arg>-H:NativeLinkerOption=/SUBSYSTEM:WINDOWS</arg>
+                                <arg>-H:NativeLinkerOption=/ENTRY:mainCRTStartup</arg>
+                            </buildArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <dependencies>
