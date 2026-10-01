@@ -4,13 +4,13 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'src/main/java/it/baccan/porttest/*.*'
+      - 'src/**'
       - '.github/workflows/graalvm.yml'
       - 'pom.xml'
   pull_request:
     branches: [ main ]
     paths:
-      - 'src/main/java/it/baccan/porttest/*.*'
+      - 'src/**'
       - '.github/workflows/graalvm.yml'
       - 'pom.xml'
   workflow_dispatch:
