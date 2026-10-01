@@ -75,7 +75,7 @@ jobs:
         run: echo "RELEASE_BODY=$(date "+%Y%m%d-%H%M%S")" >> "$GITHUB_OUTPUT"
 
       - name: Upload Windows Binaries to Release
-        if: ${{ matrix.os == 'windows-latest' && (github.event_name == 'push' || inputs.release) }}
+        if: ${{ matrix.os == 'windows-latest' && inputs.release }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
