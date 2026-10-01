@@ -59,8 +59,15 @@ jobs:
           name: PortTest-windows
           path: |
             target/PortTest.exe
+            target/*.dll
             target/PortTest-*.exe
             target/PortTest-*.jar
+
+      - name: Package native executable
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: pwsh
+        # The native executable needs the AWT/Java DLLs generated next to it
+        run: Compress-Archive -Path target/PortTest.exe, target/*.dll -DestinationPath target/PortTest-windows-native.zip
 
       - name: Create release date
         id: read_release_win
@@ -73,8 +80,8 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: build-${{ steps.read_release_win.outputs.RELEASE_BODY }}
-          file: target/PortTest.exe
-          asset_name: PortTest.exe
+          file: target/PortTest-windows-native.zip
+          asset_name: PortTest-windows-native.zip
           release_name: ""
           body: |
             Rilascio Windows del ${{ steps.read_release_win.outputs.RELEASE_BODY }}
