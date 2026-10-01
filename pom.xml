@@ -144,7 +144,7 @@
                     <verbose>true</verbose>
                     <mainClass>it.baccan.porttest.PortTest</mainClass>
                     <buildArgs>
-                        <arg>--no-fallback --verbose --allow-incomplete-classpath</arg>
+                        <arg>--no-fallback</arg>
                     </buildArgs>
                     <imageName>PortTest</imageName>
                 </configuration>
