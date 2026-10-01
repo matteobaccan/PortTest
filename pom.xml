@@ -145,6 +145,7 @@
                     <mainClass>it.baccan.porttest.PortTest</mainClass>
                     <buildArgs>
                         <arg>--no-fallback</arg>
+                        <arg>--enable-native-access=ALL-UNNAMED</arg>
                     </buildArgs>
                     <imageName>PortTest</imageName>
                 </configuration>

@@ -52,6 +52,12 @@ jobs:
         shell: bash
         run: ./mvnw --no-transfer-progress -B package -Pgraalvm
 
+      - name: Copy font configuration
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: bash
+        # AWT looks for lib/fontconfig.bfc next to the native executable
+        run: mkdir -p target/lib && cp "$JAVA_HOME/lib/fontconfig.bfc" target/lib/
+
       - name: Upload Windows binaries as artifact
         if: ${{ matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v7
@@ -60,14 +66,15 @@ jobs:
           path: |
             target/PortTest.exe
             target/*.dll
+            target/lib/fontconfig.bfc
             target/PortTest-*.exe
             target/PortTest-*.jar
 
       - name: Package native executable
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
-        # The native executable needs the AWT/Java DLLs generated next to it
-        run: Compress-Archive -Path target/PortTest.exe, target/*.dll -DestinationPath target/PortTest-windows-native.zip
+        # The native executable needs the AWT/Java DLLs and lib/fontconfig.bfc next to it
+        run: Compress-Archive -Path target/PortTest.exe, target/*.dll, target/lib -DestinationPath target/PortTest-windows-native.zip
 
       - name: Create release date
         id: read_release_win
