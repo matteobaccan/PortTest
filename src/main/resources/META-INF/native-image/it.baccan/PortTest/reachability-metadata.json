@@ -3798,6 +3798,9 @@
       "glob": "port.yaml"
     },
     {
+      "glob": "version.properties"
+    },
+    {
       "module": "java.base",
       "glob": "jdk/internal/icu/impl/data/icudt76b/nfkc.nrm"
     },

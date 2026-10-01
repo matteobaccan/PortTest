@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -44,6 +45,24 @@ public class PortTest extends javax.swing.JFrame {
      */
     public PortTest() {
         initComponents();
+        setTitle("PortTest " + getVersion() + " by Matteo Baccan");
+    }
+
+    /**
+     * Read the application version from version.properties, filled in by Maven.
+     */
+    private static String getVersion() {
+        Properties properties = new Properties();
+        try (InputStream inputStream = PortTest.class
+                .getClassLoader()
+                .getResourceAsStream("version.properties")) {
+            if (inputStream != null) {
+                properties.load(inputStream);
+            }
+        } catch (IOException ex) {
+            log.info("Error loading version", ex);
+        }
+        return properties.getProperty("version", "");
     }
 
     /**
