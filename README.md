@@ -7,6 +7,7 @@ a simple interface for sending messages over plain text or SSL-encrypted
 connections.
 
 [![CodeQL](https://github.com/matteobaccan/PortTest/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/matteobaccan/PortTest/actions/workflows/codeql-analysis.yml)
+[![GraalVM Build](https://github.com/matteobaccan/PortTest/actions/workflows/graalvm.yml/badge.svg)](https://github.com/matteobaccan/PortTest/actions/workflows/graalvm.yml)
 
 ## Features
 
